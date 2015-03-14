@@ -20,7 +20,7 @@ lazy val YARNResourceManager = project.in(file("YARNResourceManager")).dependsOn
 		version := "1.0",
 		scalaVersion := "2.11.4",
 		exportJars := true,
-		mainClass in (Compile,run):= Some("ca.usask.agents.yarnactor.resourcemanager.agents.main"),
+		mainClass in (Compile,run):= Some("ca.usask.agents.yarnactor.clustermanager.agents.main"),
 		libraryDependencies ++= Seq(
 			"com.typesafe.akka" %% "akka-actor" % "2.3.7",
 			"com.typesafe.akka" % "akka-remote_2.11" % "2.3.7",
