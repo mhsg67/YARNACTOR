@@ -1,0 +1,57 @@
+<classpath>
+  <classpathentry output="target/scala-2.11/classes" kind="src" path="src/main/scala"/>
+  <classpathentry output="target/scala-2.11/classes" kind="src" path="src/main/java"/>
+  <classpathentry output="target/scala-2.11/test-classes" kind="src" path="src/test/scala"/>
+  <classpathentry output="target/scala-2.11/test-classes" kind="src" path="src/test/java"/>
+  <classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/com.typesafe.akka/akka-actor_2.11/jars/akka-actor_2.11-2.3.7.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/com.typesafe/config/bundles/config-1.2.1.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/joda-time/joda-time/jars/joda-time-2.5.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/com.typesafe.akka/akka-remote_2.11/jars/akka-remote_2.11-2.3.7.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/com.google.protobuf/protobuf-java/bundles/protobuf-java-2.5.0.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.uncommons.maths/uncommons-maths/jars/uncommons-maths-1.2.2a.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/com.typesafe.akka/akka-camel_2.11/jars/akka-camel_2.11-2.3.7.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/com.typesafe.akka/akka-slf4j_2.11/jars/akka-slf4j_2.11-2.3.7.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.apache.camel/camel-netty/bundles/camel-netty-2.14.1.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.apache.camel/camel-core/bundles/camel-core-2.14.1.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/com.sun.xml.bind/jaxb-impl/jars/jaxb-impl-2.2.7.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/com.sun.xml.bind/jaxb-core/jars/jaxb-core-2.2.7.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/javax.xml.bind/jaxb-api/jars/jaxb-api-2.2.7.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/com.sun.istack/istack-commons-runtime/jars/istack-commons-runtime-2.16.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/com.sun.xml.fastinfoset/FastInfoset/jars/FastInfoset-1.2.12.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/javax.xml.bind/jsr173_api/jars/jsr173_api-1.0.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/io.netty/netty/bundles/netty-3.9.4.Final.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/commons-pool/commons-pool/jars/commons-pool-1.6.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.apache.camel/camel-jetty/bundles/camel-jetty-2.14.1.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.apache.camel/camel-http/bundles/camel-http-2.14.1.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.apache.geronimo.specs/geronimo-servlet_3.0_spec/bundles/geronimo-servlet_3.0_spec-1.0.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/commons-httpclient/commons-httpclient/jars/commons-httpclient-3.1.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/commons-logging/commons-logging/jars/commons-logging-1.1.3.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/commons-codec/commons-codec/jars/commons-codec-1.9.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.eclipse.jetty/jetty-server/jars/jetty-server-8.1.15.v20140411.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.eclipse.jetty/jetty-continuation/jars/jetty-continuation-8.1.15.v20140411.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.eclipse.jetty/jetty-http/jars/jetty-http-8.1.15.v20140411.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.eclipse.jetty/jetty-io/jars/jetty-io-8.1.15.v20140411.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.eclipse.jetty/jetty-util/jars/jetty-util-8.1.15.v20140411.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.eclipse.jetty/jetty-servlet/jars/jetty-servlet-8.1.15.v20140411.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.eclipse.jetty/jetty-security/jars/jetty-security-8.1.15.v20140411.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.eclipse.jetty/jetty-servlets/jars/jetty-servlets-8.1.15.v20140411.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.eclipse.jetty/jetty-client/jars/jetty-client-8.1.15.v20140411.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.eclipse.jetty/jetty-jmx/jars/jetty-jmx-8.1.15.v20140411.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.slf4j/slf4j-simple/jars/slf4j-simple-1.7.10.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.slf4j/slf4j-api/jars/slf4j-api-1.7.10.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/com.typesafe.play/play-json_2.11/jars/play-json_2.11-2.4.0-M2.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/com.typesafe.play/play-iteratees_2.11/jars/play-iteratees_2.11-2.4.0-M2.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.scala-stm/scala-stm_2.11/jars/scala-stm_2.11-0.7.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/com.typesafe.play/play-functional_2.11/jars/play-functional_2.11-2.4.0-M2.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/com.typesafe.play/play-datacommons_2.11/jars/play-datacommons_2.11-2.4.0-M2.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.joda/joda-convert/jars/joda-convert-1.7.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/com.fasterxml.jackson.core/jackson-core/bundles/jackson-core-2.4.4.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/com.fasterxml.jackson.core/jackson-annotations/bundles/jackson-annotations-2.4.4.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/com.fasterxml.jackson.core/jackson-databind/bundles/jackson-databind-2.4.4.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.scalatest/scalatest_2.11/bundles/scalatest_2.11-2.2.1.jar"/>
+  <classpathentry kind="lib" path="/home/node3/.ivy2/cache/org.scala-lang.modules/scala-xml_2.11/bundles/scala-xml_2.11-1.0.2.jar"/>
+  <classpathentry kind="src" path="/YARNCommon" exported="true" combineaccessrules="false"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="output" path="bin"/>
+</classpath>
