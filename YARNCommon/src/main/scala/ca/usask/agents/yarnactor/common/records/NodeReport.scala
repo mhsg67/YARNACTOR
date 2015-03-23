@@ -8,6 +8,7 @@ class NodeReport(val nodeId: NodeId,
                   val resource: Resource,
                   val capabilities: List[Constraint],
                   val containers: List[Container],
+                  val finishedContainers:List[(Long,Int)],
                   val utilization: Utilization,
                   val nodeState: NodeState,
                   val queueState: Int)

@@ -10,22 +10,26 @@ import org.joda.time.DateTime
 class ServerState {
 
     var nextContainerId = 0
-    var serverResource: Resource = new Resource(0,0)
+    var serverResource: Resource = new Resource(0, 0)
     var serverCapabilities: List[Constraint] = List()
     var serverContainers: List[Container] = List()
+    var finishedContainers: List[(Long, Int)] = List()
     var serverNodeState = NodeState("RUNNING")
 
     def initializeServer(): Boolean = true
 
     def initializeSimulationServer(resource: Resource, capability: List[Constraint]) = {
-        serverResource = resource        
+        serverResource = resource
         serverCapabilities = capability
         true
     }
 
-    def getServerStatus(nodeManager: ActorRef) =
+    def getServerStatus(nodeManager: ActorRef) ={
+        val tempFinishedContainers = finishedContainers.filter(x => true)
+        finishedContainers = List[(Long, Int)]()
         new NodeReport(new NodeId(agent = nodeManager), serverResource, serverCapabilities,
-            serverContainers, serverUtilization, serverNodeState, 0)
+            serverContainers, tempFinishedContainers, serverUtilization, serverNodeState, 0)
+    }
 
     def serverUtilization(): Utilization = new Utilization(0.0, 0.0)
 
@@ -36,20 +40,18 @@ class ServerState {
     def createContainer(userId: Int, jobId: Long, taskIndex: Int, size: Resource): Option[Long] = {
         if ((serverResource - serverContainers.foldLeft(new Resource(0, 0))((x, y) => y.resource + x)) < size)
             None
-        else {            
+        else {
             serverContainers = new Container(nextContainerId, userId, jobId, taskIndex, size) :: serverContainers
             nextContainerId += 1
             Some(nextContainerId - 1)
         }
     }
 
-    def killContainer(containerId: Long): Option[Int] = {
+    def killContainer(containerId: Long) = {
         if (serverContainers.exists(x => x.containerId == containerId)) {
-            val (finishedContainer, runningContainers) = serverContainers.span (x => x.containerId == containerId)
-                    serverContainers = runningContainers
-            Some(finishedContainer(0).taskIndex)
+            val (finishedContainer, runningContainers) = serverContainers.span(x => x.containerId == containerId)
+            serverContainers = runningContainers
+            finishedContainers = (finishedContainer(0).jobId, finishedContainer(0).taskIndex) :: finishedContainers
         }
-        else None
     }
-
 }

@@ -12,36 +12,21 @@ import scala.collection.mutable._
 
 class NodeManagerAgent(val id: Int = 0) extends Agent {
 
-    var havePendingServing = false
     var serverState: ServerState = null
-    var receivedHeartBeatRespond = false
     var missedHeartBeat = false
-    var containerToActorSystem = Map[Long, ActorSystem]()
-    var containerToOwnerActor = Map[Long, ActorRef]()
-    val resourceTracker = context.actorSelection(NodeManagerConfig.getResourceTrackerAddress)
+    var containerToActorSystem = Map[Long, (ActorSystem, ActorRef)]()
+    val clusterManager = context.actorSelection(NodeManagerConfig.getClusterManagerAddress)
 
     import context.dispatcher
 
     def receive = {
         case "heartBeatEvent"                        => Event_heartBeat()
-        case "emptyHeartBeatResponse"                => receivedHeartBeatRespond = true
+        case "emptyHeartBeatResponse"                =>
         case message: _NodeManagerSimulationInitiate => Event_NodeManagerSimulationInitiate(message)
         case message: _ContainerExecutionFinished    => Event_ContainerExecutionFinished(message)
-        case message: _ResourceSamplingInquiry => {
-            println("ResourceSamplingInquiry " + id.toString())
-            Handle_ResourceSamplingInquiry(sender(), message)
-        }
-        case message: _ResourceSamplingCancel => {
-            println("ResourceSamplingCancel " + id.toString())
-            Handle_ResourceSamplingCancel(message)
-        }
         case message: _AllocateContainerFromCM => {
             println("AllocateContainerFromCM " + id.toString())
             Handle_AllocateContainerFromCM(sender(), message)
-        }
-        case message: _AllocateContainerFromJM => {
-            println("AllocateContainerFromJM " + id.toString())
-            Handle_AllocateContainerFromJM(sender(), message)
         }
         case _ => Handle_UnknownMessage("NodeManagerAgent")
     }
@@ -55,50 +40,19 @@ class NodeManagerAgent(val id: Int = 0) extends Agent {
     }
 
     def Event_heartBeat() = {
-        if (!havePendingServing) {
-            resourceTracker ! new _HeartBeat(self, DateTime.now(), serverState.getServerStatus(self))
-            context.system.scheduler.scheduleOnce(NodeManagerConfig.heartBeatStartDelay, self, "heartBeatEvent")
-            receivedHeartBeatRespond = false
-        }
-        else {
-            missedHeartBeat = true
-        }
+        clusterManager ! new _HeartBeat(self, DateTime.now(), serverState.getServerStatus(self))
+        context.system.scheduler.scheduleOnce(NodeManagerConfig.heartBeatStartDelay, self, "heartBeatEvent")
     }
 
     def Event_ContainerExecutionFinished(message: _ContainerExecutionFinished) = {
-        val jobMangerRef = containerToOwnerActor.get(message.containerId).get
-
-        serverState.killContainer(message.containerId) match {
-            case None => ()
-            case Some(x) =>
-                if (message.isJobManager)
-                    containerToActorSystem.get(message.containerId).get.stop(jobMangerRef)
-                else
-                    jobMangerRef ! _TasksExecutionFinished(self, DateTime.now(), x)
-        }
-        containerToOwnerActor.remove(message.containerId)
-
-    }
-
-    def Handle_ResourceSamplingInquiry(sender: ActorRef, message: _ResourceSamplingInquiry) = {
-        if (receivedHeartBeatRespond == true && havePendingServing == false) {
-            havePendingServing == true
-            sender ! new _ResourceSamplingResponse(self, DateTime.now(), serverState.getServerFreeResources)
-        }
-    }
-
-    def Handle_ResourceSamplingCancel(message: _ResourceSamplingCancel) = {
-        havePendingServing = false
-        if (missedHeartBeat) {
-            missedHeartBeat = false
-            resourceTracker ! new _HeartBeat(self, DateTime.now(), serverState.getServerStatus(self))
-            context.system.scheduler.scheduleOnce(NodeManagerConfig.heartBeatStartDelay, self, "heartBeatEvent")
+        serverState.killContainer(message.containerId)
+        if (message.isJobManager) {
+            val (tempSystem, tempActor) = containerToActorSystem.get(message.containerId).get
+            tempSystem.stop(tempActor)
         }
     }
 
     def Handle_AllocateContainerFromCM(sender: ActorRef, message: _AllocateContainerFromCM) = {
-        receivedHeartBeatRespond = true
-
         if (message._jobDescriptions != null)
             if (startNewJobManagers(message._jobDescriptions) < message._jobDescriptions.length)
                 sender ! "ridi"
@@ -130,10 +84,9 @@ class NodeManagerAgent(val id: Int = 0) extends Agent {
     import com.typesafe.config.ConfigFactory
     def createJobManagerActor(job: JobDescription, samplInfo: SamplingInformation, containerId: Long) = {
         val jobMangerSystem = ActorSystem.create("JobManagerAgent", ConfigFactory.load().getConfig("JobManagerAgent"))
-        val newJobManager = jobMangerSystem.actorOf(Props(new JobManagerAgent(containerId, self, job.userId, job.jobId, samplInfo)), name = "JobManagerAgent")
+        val newJobManager = jobMangerSystem.actorOf(Props(new JobManagerAgent(containerId, self, job.userId, job.jobId)), name = "JobManagerAgent")
         newJobManager ! new _JobManagerSimulationInitiate(job.tasks)
-        containerToOwnerActor.update(containerId, newJobManager)
-        containerToActorSystem.update(containerId, jobMangerSystem)
+        containerToActorSystem.update(containerId, (jobMangerSystem, newJobManager))
     }
 
     def startNewTasks(tasks: List[TaskDescription]): Int = tasks match {
@@ -145,16 +98,9 @@ class NodeManagerAgent(val id: Int = 0) extends Agent {
         serverState.createContainer(task.userId, task.jobId, task.index, task.resource) match {
             case None => false
             case Some(x) => {
-                containerToOwnerActor.update(x, ownerActor)
                 context.system.scheduler.scheduleOnce(FiniteDuration(task.duration.getMillis, MILLISECONDS), self, new _ContainerExecutionFinished(x, false))
                 true
             }
         }
-    }
-
-    def Handle_AllocateContainerFromJM(sender: ActorRef, message: _AllocateContainerFromJM) = {
-        val tasks = message._taskDescriptions.map(x => new TaskDescription(sender, x.jobId, x.index, x.duration, x.resource, x.relativeSubmissionTime, x.constraints, x.userId))
-        if (startNewTasks(tasks) < message._taskDescriptions.length)
-            sender ! "ridi"
     }
 }

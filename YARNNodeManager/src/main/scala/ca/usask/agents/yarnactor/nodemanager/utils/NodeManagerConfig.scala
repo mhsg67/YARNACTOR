@@ -13,16 +13,16 @@ object NodeManagerConfig {
         Logger.Log("Finished reading configuration file")
     }
 
-    lazy val getResourceTrackerAddress = "akka.tcp://ResourceTrackerAgent@" +
-        trackerIPAddress + ":" +
-        trackerDefualtPort + "/" +
-        "user/ResourceTrackerAgent"
+    lazy val getClusterManagerAddress = "akka.tcp://ClusterManagerAgent@" +
+        clusterManagerIPAddress + ":" +
+        clusterManagerAgentDefualtPort + "/" +
+        "user/ClusterManagerAgent"
 
     /**
-     * To access resourceTracker actor
+     * To access ClusterManager actor
      */
-    val trackerIPAddress = "127.0.1.1"
-    val trackerDefualtPort = "3000"
+    val clusterManagerIPAddress = "127.0.1.1"
+    val clusterManagerAgentDefualtPort = "2000"
 
     /**
      * Based on YARN configuration we set heart beat interval
@@ -37,37 +37,37 @@ object NodeManagerConfig {
     val heartBeatStartDelay = 1000 millis
 
     /**
-     * The same as YARN we check containers every 3 sec and 
-     * their resource consumption to control their limitation 
+     * The same as YARN we check containers every 3 sec and
+     * their resource consumption to control their limitation
      */
     val checkContainersInterval = 3000 millis
-    
+
     /**
      * In case we have resourceSamplingInquiry we check server state
      * to see if we can JobMaganer container request
      */
     val checkAvailableResource = 5 millis
     val firstCheckAvailableResources = 0 millis
-    
+
     /**
-     * When ContainerManager realizes that it can server container with the size in 
-     * resource sampling inquiry it respond the JobManager and wait for its respond, 
+     * When ContainerManager realizes that it can server container with the size in
+     * resource sampling inquiry it respond the JobManager and wait for its respond,
      * if JobManger does not respond back in x millisecond ContainerManager start serving
-     * other resource sampling inquiries  
-     * 
+     * other resource sampling inquiries
+     *
      * suppose network delay is 2 millis =>
      * 2 millis = send resourceSmaplingResponse to JM
      * 6 millis = JM decision making
      * 2 millis = send resource allocation request back
      */
     val waitForJMActionToResourceSamplingResponseTimeout = 700 millis
-    
+
     /**
      * Based on heartBeatStartDelay, it should be more than
      * that
      */
-    val allCheckStartDelay = 1500 millis 
-    
+    val allCheckStartDelay = 1500 millis
+
     /**
      * After sending heartBeat, containerManager stop serving resource sampling
      * inquiry since the ClusterManager may send the resource request to this node
@@ -82,7 +82,7 @@ object NodeManagerConfig {
      *
      *  10 millis = total
      */
-    val stopServingJobManagerRequestAfterHeartBeat = 10 
-    val stopServingJobManagerRequestBeforeHeartBeat = 1000 -  waitForJMActionToResourceSamplingResponseTimeout.toMillis
+    val stopServingJobManagerRequestAfterHeartBeat = 10
+    val stopServingJobManagerRequestBeforeHeartBeat = 1000 - waitForJMActionToResourceSamplingResponseTimeout.toMillis
 
 }
